@@ -1,26 +1,20 @@
-import express from 'express';
+import express, { Router } from 'express';
 import bodyParser from 'body-parser';
 import axios from 'axios';
 import crypto from 'crypto';
+import ServerlessHttp from 'serverless-http';
 
-const app = express();
+const api = express();
 
-app.use(bodyParser.json());
 
-function encodeServerKey(serverKey) {
-  const buffer = Buffer.from(serverKey, 'utf8');
-  const encodedKey = buffer.toString('base64');
-  return encodedKey;
-}
+api.use(bodyParser.json());
 
 const SERVER_KEY = "SB-Mid-server-CbJg1WEzeYmzPhzSH4WICQY_";
 const CLIENT_KEY = "SB-Mid-client-Ye8zF-MGRfrnuAUv";
 const password = '';
 
-const encodedKey = encodeServerKey(SERVER_KEY);
-console.log(encodedKey);
-
-app.post('/generateQR', async (req, res) => {
+const router = Router()
+api.post('/generateQR', async (req, res) => {
   try {
     const { order_id, gross_amount } = req.body;
 
@@ -51,7 +45,7 @@ app.post('/generateQR', async (req, res) => {
   }
 });
 
-app.post('/midtransNotification', async (req, res) => {
+api.post('/midtransNotification', async (req, res) => {
   try {
     const receivedSignatureKey = req.headers['signature-key'];
     const requestBody = JSON.stringify(req.body);
@@ -89,6 +83,10 @@ app.post('/midtransNotification', async (req, res) => {
   }
 });
 
-app.listen(3000, () => {
+api.listen(3000, () => {
   console.log('Server is running on port 3000');
 });
+
+api.use("/api/", router);
+
+export const handler = ServerlessHttp(api);
