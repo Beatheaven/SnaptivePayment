@@ -87,6 +87,6 @@ api.listen(3000, () => {
   console.log('Server is running on port 3000');
 });
 
-api.use("/api/", router);
+api.use("/api/server", router);
 
 export const handler = ServerlessHttp(api);
