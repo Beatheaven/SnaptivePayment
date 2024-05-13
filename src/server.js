@@ -84,6 +84,6 @@ api.post('/midtransNotification', async (req, res) => {
 });
 
 
-api.use(".netlify/functions/api", router);
+api.use("/api/", router);
 
 module.exports.handler = ServerlessHttp(api);
