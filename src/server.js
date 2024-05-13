@@ -14,7 +14,7 @@ const CLIENT_KEY = "SB-Mid-client-Ye8zF-MGRfrnuAUv";
 const password = '';
 
 const router = Router()
-api.post('/generateQR', async (req, res) => {
+router.post('/generateQR', async (req, res) => {
   try {
     const { order_id, gross_amount } = req.body;
 
@@ -45,7 +45,7 @@ api.post('/generateQR', async (req, res) => {
   }
 });
 
-api.post('/midtransNotification', async (req, res) => {
+router.post('/midtransNotification', async (req, res) => {
   try {
     const receivedSignatureKey = req.headers['signature-key'];
     const requestBody = JSON.stringify(req.body);
@@ -84,6 +84,6 @@ api.post('/midtransNotification', async (req, res) => {
 });
 
 
-api.use("/api/", router);
+api.use(".netlify/functions/api", router);
 
 module.exports.handler = ServerlessHttp(api);
